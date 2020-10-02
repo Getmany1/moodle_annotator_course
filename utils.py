@@ -43,6 +43,15 @@ def getdicts_question_task():
                 # search for @@PLUGINFILE@@, which contains the name of prompt audio or image
                 if q_name.split(' ')[1].isdigit(): # Tehtävä X (1,2...)
                     dict_task_prompt[tasknum] = prompt
+
+                    # In pilot test, tasks 3 and 8 do not have sub-tasks!!
+                    if tasknum == 3:
+                        dict_question_prompt[str(tasknum)+'a'] = prompt
+                        question_list.append(str(tasknum)+'a')
+                    if tasknum == 8 and q.getAttribute("id") == "3014":
+                        dict_question_prompt[str(tasknum)+'a'] = prompt
+                        question_list.append(str(tasknum)+'a')
+
                 else: # Tehtävä Xx (1a,2f...)
                     task_question = q_name.split(' ')[1]
                     dict_question_prompt[task_question] = prompt
