@@ -1,5 +1,6 @@
 __pycache__/
 my_cookies.py
+moodle_quiz
 *.txt
 backup/*
 !backup/.gitkeep 
