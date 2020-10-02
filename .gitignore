@@ -1,5 +1,5 @@
 __pycache__/
 my_cookies.py
-quiz.txt
+*.txt
 backup/*
 !backup/.gitkeep 
