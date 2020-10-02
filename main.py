@@ -1,16 +1,7 @@
 import requests
 import urllib3
+from my_cookies import cookies, headers # personal cookies from moodle (convert curl to python with https://curl.trillworks.com/)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-
-cookies = {
-    
-}
-
-headers = {
-
-}
-
 
 
 def write2disk(file, name):
