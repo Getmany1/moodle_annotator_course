@@ -1,6 +1,7 @@
 from xml.dom.minidom import parse
 import os
 import re
+import shutil
 
 def natural_sort_key(s):
     return [int(text) if text.isdigit() else text.lower()
@@ -73,3 +74,23 @@ def make_dirs(dict_task_prompt, dict_question_prompt):
                 os.mkdir(os.path.join(parent_dir,str(tasknum),qnum))
                 with open(os.path.join(parent_dir,str(tasknum),qnum,'prompt.txt'), 'w', encoding='utf-8') as f:
                     f.write(dict_question_prompt[qnum])
+
+def get_prompt_files():
+    hash2filename_dict = {}
+    fxml = os.path.join("backup","files.xml")
+    docs = parse(fxml)
+    files = docs.getElementsByTagName("file")
+    # Find all files and corresponding real filenames
+    for f in files:
+        filetype = f.getElementsByTagName("mimetype")[0].firstChild.nodeValue.split('/')[0]
+        if filetype == 'audio' or filetype == 'image':
+            filename = f.getElementsByTagName("filename")[0].firstChild.nodeValue
+            content_hash = f.getElementsByTagName("contenthash")[0].firstChild.nodeValue
+            hash2filename_dict[content_hash] = filename
+    # Search for files, copy to propmt_files dir and rename
+    filedir = os.path.join("backup","files")
+    os.mkdir("prompt_files")
+    for root, dirs, files in os.walk(filedir):
+        for name in files:
+            if name in hash2filename_dict:
+                shutil.copy(os.path.join(root, name), os.path.join("prompt_files", hash2filename_dict[name]))

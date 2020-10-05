@@ -1,7 +1,9 @@
 __pycache__/
 my_cookies.py
 moodle_quiz
+prompt_files
 *.txt
 *.zip
 backup/*
-!backup/.gitkeep 
+!backup/.gitkeep
+.vscode
