@@ -90,7 +90,7 @@ def get_prompt_files():
     # Search for files, copy to propmt_files dir and rename
     filedir = os.path.join("backup","files")
     os.mkdir("prompt_files")
-    for root, dirs, files in os.walk(filedir):
+    for root, _, files in os.walk(filedir):
         for name in files:
             if name in hash2filename_dict:
                 shutil.copy(os.path.join(root, name), os.path.join("prompt_files", hash2filename_dict[name]))
