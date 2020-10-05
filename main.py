@@ -9,13 +9,16 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 quiz = 'quiz.txt' # txt file which contains links for student audio responses
 parent_dir = os.path.join('moodle_quiz')
 
+# Get a dictionary to map from Moodle user IDs to user names
 dict_userid_username = getdict_userid_username()
 
+# Get auxilary dictionaries for tasks and subtasks
 dict_q, dict_task_prompt, dict_question_prompt = getdicts_question_task()
 
+# Prepare folder structure and text prompts
 make_dirs(dict_task_prompt, dict_question_prompt)
 
-#def parse_quiz(quiz, dict_userid_username):
+# Download students' audio recordings
 with open(quiz, 'r') as f:
     for line in f:
         if line.startswith('save-file'):

@@ -4,10 +4,16 @@ import re
 import shutil
 
 def natural_sort_key(s):
+    """
+    Returns a key for sorting a list containing subtasks in format ["1a", "3d", "5c", ...]
+    """
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(re.compile('([0-9]+)'), s)]
 
 def getdict_userid_username():
+    """
+    Makes a dictionary to map from Moodle user IDs to user names
+    """
     dict_userid_username = {}
     userxml = os.path.join("backup","users.xml")
     docs = parse(userxml)
@@ -41,7 +47,6 @@ def getdicts_question_task():
             for q in questions:
                 prompt = q.getElementsByTagName("questiontext")[0].firstChild.nodeValue # task_prompt.txt / prompt.txt
                 q_name = q.getElementsByTagName("name")[0].firstChild.nodeValue
-                # search for @@PLUGINFILE@@, which contains the name of prompt audio or image
                 if q_name.split(' ')[1].isdigit(): # Tehtävä X (1,2...)
                     dict_task_prompt[tasknum] = prompt
 
@@ -63,23 +68,33 @@ def getdicts_question_task():
     return dict_q, dict_task_prompt, dict_question_prompt
 
 def make_dirs(dict_task_prompt, dict_question_prompt):
-    parent_dir = os.path.join('moodle_quiz')
-    os.mkdir(parent_dir)
+    """
+    Creates folders for tasks and subtasks and adds prompts
+    """
+    parent_dir = "moodle_quiz"
+    if not os.path.isdir(parent_dir):
+        os.mkdir(parent_dir)
     for tasknum in dict_task_prompt.keys():
-        os.mkdir(os.path.join(parent_dir,str(tasknum)))
+        if not os.path.isdir(os.path.join(parent_dir,str(tasknum))):
+            os.mkdir(os.path.join(parent_dir,str(tasknum)))
         with open(os.path.join(parent_dir,str(tasknum),'task_prompt.txt'), 'w', encoding='utf-8') as f:
             f.write(dict_task_prompt[tasknum])
         for qnum in dict_question_prompt.keys():
             if tasknum == int(qnum[:-1]):
-                os.mkdir(os.path.join(parent_dir,str(tasknum),qnum))
+                if not os.path.isdir(os.path.join(parent_dir,str(tasknum),qnum)):
+                    os.mkdir(os.path.join(parent_dir,str(tasknum),qnum))
                 with open(os.path.join(parent_dir,str(tasknum),qnum,'prompt.txt'), 'w', encoding='utf-8') as f:
                     f.write(dict_question_prompt[qnum])
 
 def get_prompt_files():
+    """
+    Extracts auxilary prompt files (images & audio) to a separate folder
+    """
     hash2filename_dict = {}
     fxml = os.path.join("backup","files.xml")
     docs = parse(fxml)
     files = docs.getElementsByTagName("file")
+
     # Find all files and corresponding real filenames
     for f in files:
         filetype = f.getElementsByTagName("mimetype")[0].firstChild.nodeValue.split('/')[0]
@@ -87,10 +102,13 @@ def get_prompt_files():
             filename = f.getElementsByTagName("filename")[0].firstChild.nodeValue
             content_hash = f.getElementsByTagName("contenthash")[0].firstChild.nodeValue
             hash2filename_dict[content_hash] = filename
+
     # Search for files, copy to propmt_files dir and rename
     filedir = os.path.join("backup","files")
-    os.mkdir("prompt_files")
+    promptdir = "prompt_files"
+    if not os.path.isdir(promptdir):
+        os.mkdir("prompt_files")
     for root, _, files in os.walk(filedir):
         for name in files:
             if name in hash2filename_dict:
-                shutil.copy(os.path.join(root, name), os.path.join("prompt_files", hash2filename_dict[name]))
+                shutil.copy(os.path.join(root, name), os.path.join(promptdir, hash2filename_dict[name]))
