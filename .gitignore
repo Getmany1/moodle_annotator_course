@@ -7,3 +7,7 @@ prompt_files
 backup/*
 !backup/.gitkeep
 .vscode
+rubric_quiz.py
+*.html
+!template.html
+*.xml

@@ -1,0 +1,52 @@
+<![CDATA[<table>
+    <tbody>
+    <tr>
+        <td style="border: 1px solid black;"><b>Student ID: $StudentID <br><br></b></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;"><b> Question ID: $QuestionID <br><br></b></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;"><b> Task Prompt: $TaskPrompt <br><br></b></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;"><b> Question Prompt: $QuestionPrompt <br><br></b></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;"><b> Response Transcript: {} <br><br></b></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;"><a href="$Wav_path" style="background-color: rgb(255, 255, 255); font-size: 0.9375rem; font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;;">recording.ogg</a><br><br></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;"><b>CEFR Holistic Level</b> {1:MULTICHOICE_H:%100%A1#~%100%A2#~%100%B1#~%100%B2#~%100%C1#~%100%C2#}<br><br></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;"><b>Tehtävän suorittaminen (vastaako puhuja koekysymykseen) [Task fulfillment] </b>{1:MULTICHOICE_V:%100%(0) Ei vastaa ollenkaan tehtävänantoon. #~%100%(1)Vastaa tehtävänantoon vain osittain, vastauksessa on paljon merkittäviä puutteita#~%100%(2)Vastaa tehtävänantoon hyvin, mutta vastauksessa on joitakin
+            oleellisia puutteita.#~%100%(3)Vastaa tehtävänantoon kattavasti, vastauksessa ei ole merkittäviä puutteita.} <u><b><i>Notes: </i></b></u>{1:SHORTANSWER:=. This is just a placeholder for teachers to type additional notes if they think it
+            is necessary *}.<br><br></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;"><b>Sujuvuus (lauseprosodia) [Fluency] </b>{1:MULTICHOICE_V:%100%(0) Ei voi arvioida.#~%100%(1)Epäsujuva; paljon taukoja, toistoja, katkoksia ja empimistä.#~%100%(2) Kohtalaisen sujuva; joitakin taukoja, toistoja, katkoksia ja empimistä. #~%100%(3)Todella sujuva ja vaivaton; ei häiritseviä taukoja, toistoja, katkoksia tai empimistä.} <u><b><i>Notes:</i></b></u>{1:SHORTANSWER:=. This is just a placeholder for teachers to type additional notes if they think it is necessary *}.<br><br></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;"><b>Ääntäminen (äänteiden ja prosodisten piirteiden hallinta ja ääntämisen ymmärrettävyys)
+            [Pronunciation]</b> {1:MULTICHOICE_V:%100%(0) Ei voi arvioida. #~%100%(1)heikko, vaikea ymmärtää, paljon ääntämisvirheitä#~%100%(2)kohtalainen, melko helppo ymmärtää, mutta joitakin ongelmia,
+            ääntämisvirheitä#~%100%(3)hyvä, täysin ymmärrettävä, ei suurempia ääntämisvirheitä} <u><b><i>Notes:</i></b></u>{1:SHORTANSWER:=. This is just a placeholder for teachers to type additional notes if they think it is necessary *}.<br><br></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;"><b>Ilmaisun laajuus (kuinka laajaa sanastoa, rakenteita ja ilmauksia puhuja käyttää) [Vocabulary] </b>{1:MULTICHOICE_V:%100%(0) Ei voi arvioida.#~%100%(1)yksittäisiä sanoja, ulkoa opeteltuja ilmauksia#~%100%(2)perussanasto, lauseita#~%100%(3)monipuolinen ja laaja sanasto} <u><b><i>Notes:</i></b></u> {1:SHORTANSWER:=.
+            This is just a placeholder for teachers to type additional notes if they think it is necessary *}.<br><br></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;"><b>Sanaston ja kieliopin tarkkuus (sanasto- ja kielioppivirheiden vaikutus ymmärrettävyyteen)
+            [Vocabulary and grammar – Accuracy] </b>{1:MULTICHOICE_V:%100%(0) Ei voi arvioida. #~%100%(1)Paljon ymmärrettävyyttä haittaavia sanasto- ja kielioppivirheitä. #~%100%(2) Joitakin ymmärrettävyyttä haittaavia sanasto- ja kielioppivirheitä. #~%100%(3) Ei ollenkaan ymmärrettävyyttä haittaavia sanasto- ja kielioppivirheitä. } <u><b><i>Notes:</i></b></u> {1:SHORTANSWER:=. This is just a placeholder for teachers to type additional
+            notes if they think it is necessary *}.
+            <br><br></td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid black;"><b>Confidence Score</b> {1:MULTICHOICE_V:%100%(0)Not Confident#~%100%(1) Less Confident#~%100%(2) Confident#~%100%(3) Very Confident} <u><b><i>General Notes:</i></b></u> {1:SHORTANSWER:=. This is just a placeholder for teachers to type additional
+            notes if they think it is necessary *}.<br><br></td>
+            </tr>
+        </tbody>
+            </table>]]>
