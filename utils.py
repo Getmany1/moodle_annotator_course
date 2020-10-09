@@ -4,6 +4,21 @@ import re
 import shutil
 from string import Template
 from lxml import etree
+from bs4 import BeautifulSoup as BS
+from bs4 import Comment
+
+def prompt_from_html(html_filename, id):
+    """
+    Search for a question or task prompt from the html file by ID
+    """
+    with open(html_filename, encoding='utf-8') as fp:
+        soup = BS(fp, 'html.parser')
+    comments = soup.find_all(string=lambda text: isinstance(text, Comment))
+    for c in comments:
+        if c.split(' ')[2] == id:
+            next_node = c.find_next_sibling('div')
+            prompt = ''.join([str(i) for i in next_node.p.contents])
+            return prompt
 
 def natural_sort_key(s):
     """
@@ -26,7 +41,7 @@ def getdict_userid_username():
         dict_userid_username[userid] = username
     return dict_userid_username
     
-def getdicts_question_task():
+def getdicts_question_task(prompt_source='xml', html_filename=None):
     """
     Return:
     dict_q: dictionary from question number in quiz.txt (1,2,3,4,5...) to question number in moodle (1a,1b,2a,2b,2c...)
@@ -47,7 +62,11 @@ def getdicts_question_task():
             tasknum = int(name.split(' ')[1])
             questions = task.getElementsByTagName("question")
             for q in questions:
-                prompt = q.getElementsByTagName("questiontext")[0].firstChild.nodeValue # task_prompt.txt / prompt.txt
+                id = q.getAttribute('id')
+                if prompt_source == 'xml':
+                    prompt = q.getElementsByTagName("questiontext")[0].firstChild.nodeValue # task_prompt.txt / prompt.txt
+                elif prompt_source == 'html':
+                    prompt = prompt_from_html(html_filename, id)
                 q_name = q.getElementsByTagName("name")[0].firstChild.nodeValue
                 if q_name.split(' ')[1].isdigit(): # Tehtävä X (1,2...)
                     dict_task_prompt[tasknum] = prompt
@@ -120,13 +139,13 @@ def read_txt(filename):
         txt = file.read()
     return str(txt)
 
-def gen_rubric(student, question, t_prompt, q_prompt, wavpath):
+def gen_rubric(txt, student, question, t_prompt, q_prompt, wavpath):
     s = Template(txt)
     tt = s.substitute(StudentID=student, QuestionID=question, TaskPrompt=t_prompt, QuestionPrompt=q_prompt, Wav_path=wavpath)
     return tt
     
 
-def generate_quiz_xml(task, ques_var, user, wav_path, task_prompt, question_prompt, quiz):
+def generate_quiz_xml(txt, task, ques_var, user, wav_path, task_prompt, question_prompt, quiz):
     """Generate a Cloze-type Moodle question quiz"""
     
     question = etree.SubElement(quiz, "question", type="cloze")
@@ -135,7 +154,7 @@ def generate_quiz_xml(task, ques_var, user, wav_path, task_prompt, question_prom
     text.text = f"{task}_{ques_var}_{user}"
     questiontext = etree.SubElement(question, "questiontext", format="html")
     qtext = etree.SubElement(questiontext, "text")
-    qtext.text = gen_rubric(user, ques_var, read_txt(task_prompt), read_txt(question_prompt), wav_path)
+    qtext.text = gen_rubric(txt, user, ques_var, read_txt(task_prompt), read_txt(question_prompt), wav_path)
     generalfeedback = etree.SubElement(question, "generalfeedback", format="html")
     gb_text = etree.SubElement(generalfeedback, "text")
     penalty = etree.SubElement(question, "penalty")
