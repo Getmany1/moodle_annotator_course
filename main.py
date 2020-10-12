@@ -18,9 +18,9 @@ html_filename='student_quiz.html' # name of the html file containing the copy of
 STAGE1 = True # download student responses and prompts + create quiz
 STAGE2 = True # create rater quiz
 
-## Stage 1. Prepare files (student audio recordings, prompt files) for creating rater quiz
-
 if STAGE1:
+    ## Stage 1. Prepare files (student audio recordings, prompt files) for creating rater quiz
+    
     # Get a dictionary to map from Moodle user IDs to user names
     dict_userid_username = getdict_userid_username()
 
@@ -50,7 +50,7 @@ if STAGE2:
     with open(html_temp_fname, 'r', encoding='utf8') as temp:
         txt = temp.read()
 
-    # ??
+    # Create element
     quiz = etree.Element("quiz")
 
     # Generate quiz
