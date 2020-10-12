@@ -69,15 +69,21 @@ def getdicts_question_task(prompt_source='xml', html_filename=None):
                     prompt = prompt_from_html(html_filename, id)
                 q_name = q.getElementsByTagName("name")[0].firstChild.nodeValue
                 if q_name.split(' ')[1].isdigit(): # Tehtävä X (1,2...)
-                    dict_task_prompt[tasknum] = prompt
 
                     # In pilot test, tasks 3 and 8 do not have sub-tasks!!
                     if tasknum == 3:
-                        dict_question_prompt[str(tasknum)+'a'] = prompt
+                        dict_task_prompt[tasknum] = prompt
+                        dict_question_prompt[str(tasknum)+'a'] = '' # no need to duplicate the prompt
                         question_list.append(str(tasknum)+'a')
-                    if tasknum == 8 and q.getAttribute("id") == "3014":
-                        dict_question_prompt[str(tasknum)+'a'] = prompt
-                        question_list.append(str(tasknum)+'a')
+                    elif tasknum == 8:
+                        if q.getAttribute("id") == "3013": # Tehtävä 8
+                            dict_task_prompt[tasknum] = prompt
+                        elif q.getAttribute("id") == "3014": # Tehtävä 8a
+                            dict_question_prompt[str(tasknum)+'a'] = prompt
+                            question_list.append(str(tasknum)+'a')
+
+                    else:
+                        dict_task_prompt[tasknum] = prompt
 
                 else: # Tehtävä Xx (1a,2f...)
                     task_question = q_name.split(' ')[1]
