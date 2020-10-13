@@ -15,12 +15,12 @@ prompt_source='html' # 'xml' to extract prompts from a xml backup file questions
                     # 'html' to extract prompts from a html copy of the quiz
 html_filename='student_quiz.html' # name of the html file containing the copy of the quiz
 
-STAGE1 = True # download student responses and prompts + create quiz
+STAGE1 = True # download student responses and prompts
 STAGE2 = True # create rater quiz
 
 if STAGE1:
     ## Stage 1. Prepare files (student audio recordings, prompt files) for creating rater quiz
-    
+
     # Get a dictionary to map from Moodle user IDs to user names
     dict_userid_username = getdict_userid_username()
 
