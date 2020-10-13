@@ -1,4 +1,5 @@
 import requests
+import shutil
 import os
 import glob
 import urllib3
@@ -40,9 +41,11 @@ if STAGE1:
                 question_num = dict_q[qnum]
                 task_num = int(question_num[:-1])
                 os.mkdir(os.path.join(parent_dir, str(task_num), question_num, username))
-                r = requests.get(url, allow_redirects=True, headers=headers, cookies=cookies, verify=False)
-                with open(os.path.join(parent_dir, str(task_num), question_num, username, 'recording.ogg'), 'wb') as f:
-                    f.write(r.content)
+                r = requests.get(url, allow_redirects=True, headers=headers, cookies=cookies, verify=False, stream=True)
+                if r.status_code == 200:
+                    with open(os.path.join(parent_dir, str(task_num), question_num, username, 'recording.ogg'), 'wb') as f:
+                        r.raw.decode_content = True
+                        shutil.copyfileobj(r.raw, f)
 if STAGE2:
     ## Stage 2. Create quiz
 
