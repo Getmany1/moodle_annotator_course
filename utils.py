@@ -169,3 +169,18 @@ def generate_quiz_xml(txt, task, ques_var, user, wav_path, task_prompt, question
     hidden.text = "0"
     idnumber = etree.SubElement(question, "idnumber")
     return quiz
+
+def getdict_recording_url(recordings_links_file, dict_userid_username, dict_q):
+    """
+    Make a dictionary to map from Moodle username and question number to the link to the corresponding audio recording
+    """
+    dict_recording_url = {}
+    with open(recordings_links_file, 'r') as f:
+        for line in f:
+            if line.startswith('save-file'):
+                _, url, _, userpath = line.strip().split(' ')
+                userid, qnum = int(userpath.split('/')[0].split('-')[2]), int(userpath.split('/')[1].split('-')[0][1:])
+                username = dict_userid_username[userid]
+                question_num = dict_q[qnum]
+                dict_recording_url[(username, question_num)] = url
+    return dict_recording_url

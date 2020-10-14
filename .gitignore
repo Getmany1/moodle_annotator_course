@@ -6,6 +6,8 @@ prompt_files
 *.zip
 backup/*
 !backup/.gitkeep
+outputs/*
+!outputs/.gitkeep
 .vscode
 rubric_quiz.py
 *.html
