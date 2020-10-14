@@ -52,12 +52,7 @@ if STAGE1:
                 r = requests.get(url, allow_redirects=True, headers=headers, cookies=cookies, verify=False)
                 with open(os.path.join(parent_dir, str(task_num), question_num, username, 'recording.ogg'), 'wb') as f:
                     f.write(r.content)
-                
-                """r = requests.get(url, allow_redirects=True, headers=headers, cookies=cookies, verify=False, stream=True)
-                if r.status_code == 200 or r.status_code == 206:
-                    with open(os.path.join(parent_dir, str(task_num), question_num, username, 'recording.ogg'), 'wb') as f:
-                        r.raw.decode_content = True
-                        shutil.copyfileobj(r.raw, f)"""
+
 if STAGE2:
     ## Stage 2. Create quiz
 
