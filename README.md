@@ -26,8 +26,8 @@ Files needed to download/create manually:
 - Go to "Suullisen kielitaidon koe (suomi)" -> "Kysymyspankki" -> "Vie" -> "Vie kysymykset tiedostoon" -> choose "XHTML-muotoinen" -> press "Vie kysymykset tiedostoon"
 - Put the downloaded file into the same folder where "main.py" is located. The default name for the file is "student_quiz.html" (if other filename, change the variable "html_filename" in main.py)
 4) Python file with cookies "my_cookies.py". The file should contain variables "cookies" and "headers". To get the cookies, you can:
-- log in to the digitalamoodle.aalto.fi (or open any link from quiz.txt)
-- go to DevTools in your browser (cntrl+shift+i in Chrome Win10)
+- log in to the digitalamoodle.aalto.fi
+- go to DevTools in your browser (cntrl+shift+i in Chrome Win10) when you are on the Digitalamoodle main page
 - go to the "Network" tab
 - ctrl-click a request, "Copy as cURL (bash)".
 - paste tp https://curl.trillworks.com/ to convert cURL -> Python cookies.
