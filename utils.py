@@ -168,6 +168,10 @@ def generate_quiz_xml(txt, task, ques_var, user, wav_path, task_prompt, question
     hidden = etree.SubElement(question, "hidden")
     hidden.text = "0"
     idnumber = etree.SubElement(question, "idnumber")
+    tags = etree.SubElement(question, "tags")
+    tag = etree.SubElement(tags, "tag")
+    tag_text = etree.SubElement(tag, "text")
+    tag_text.text = ques_var
     return quiz
 
 def getdict_recording_url(recordings_links_file, dict_userid_username, dict_q):
