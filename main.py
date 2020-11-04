@@ -9,6 +9,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 ## Parameters
 recordings_links_file = 'quiz.txt' # txt file which contains links for student audio responses
+audio_format = 'ogg' # audio format of audio recordings, default: 'ogg'
 parent_dir = 'moodle_quiz' # name of folder which will contain the collected data
 output_dir = 'outputs' # name of folder where to put the generated xml quizes
 html_temp_fname = 'template.html' # html template file for rater quiz
@@ -50,7 +51,7 @@ if STAGE1:
                 task_num = int(question_num[:-1])
                 os.mkdir(os.path.join(parent_dir, str(task_num), question_num, username))
                 r = requests.get(url, allow_redirects=True, headers=headers, cookies=cookies, verify=False)
-                with open(os.path.join(parent_dir, str(task_num), question_num, username, 'recording.ogg'), 'wb') as f:
+                with open(os.path.join(parent_dir, str(task_num), question_num, username, 'recording.'+audio_format), 'wb') as f:
                     f.write(r.content)
 
 if STAGE2:
@@ -64,7 +65,7 @@ if STAGE2:
     quiz = etree.Element("quiz")
 
     # Generate quiz
-    for f in glob.glob(parent_dir+'/**/*.ogg', recursive=True):
+    for f in glob.glob(parent_dir+'/**/*.'+audio_format, recursive=True):
         dirpath, wavfile = os.path.split(f)
         task, ques_var, user = dirpath.split(os.sep)[-3:]
         if wavs_from_server:
@@ -74,7 +75,11 @@ if STAGE2:
             wav_path = dict_recording_url[(user, ques_var)]
         task_prompt = os.path.abspath(os.sep.join(dirpath.split(os.sep)[:-2])+os.sep+'task_prompt.txt')
         question_prompt = os.path.abspath(os.sep.join(dirpath.split(os.sep)[:-1])+os.sep+'prompt.txt')
-        generate_quiz_xml(txt, task, ques_var, user, wav_path, task_prompt, question_prompt, quiz)
+        if os.path.isfile(os.path.abspath(dirpath+os.sep+'transcript.txt')):
+            transcript = os.path.abspath(dirpath+os.sep+'transcript.txt')
+        else:
+            transcript = None
+        generate_quiz_xml(txt, task, ques_var, user, wav_path, task_prompt, question_prompt, quiz, transcript)
 
     # Save the quiz in a moodle xml file
     rater_quiz_xml_fname = 'raterquiz_' + datetime.now().strftime("%d.%m.%Y_%H-%M-%S") + '.xml'
