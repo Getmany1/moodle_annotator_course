@@ -10,7 +10,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 ## Parameters
 recordings_links_file = 'quiz.txt' # txt file which contains links for student audio responses
 audio_format = 'ogg' # audio format of audio recordings, default: 'ogg'
-parent_dir = 'moodle_quiz' # name of folder which will contain the collected data
+parent_dir = 'moodle_quiz2' # name of folder which will contain the collected data
 output_dir = 'outputs' # name of folder where to put the generated xml quizes
 html_temp_fname = 'template.html' # html template file for rater quiz
 prompt_source = 'html' # 'xml' to extract prompts from a xml backup file questions.xml
