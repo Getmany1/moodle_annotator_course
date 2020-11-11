@@ -17,14 +17,14 @@ prompt_source = 'html' # 'xml' to extract prompts from a xml backup file questio
                     # 'html' to extract prompts from a html copy of the quiz
 html_filename = 'student_quiz.html' # name of the html file containing the copy of the quiz
 
-wavs_from_server = False # True if you want to access the audio responses from the server when generating the rater quizz
+wavs_from_server = True # True if you want to access the audio responses from the server when generating the rater quizz
                         # (in this case, you need to upload them to the server manually before running the script);
                         # False if you want to access the audio responses diectly from the student quizes
                         # (in this case, no need to download the student recordings; links will be extracted from recordings_links_file)
 server_path = "http://digitalamoodle.aalto.fi/digi_rsrc/" # path to server where the uploaded audio responses are located
                                                             # (needed only if wavs_from_server = True)
 
-STAGE1 = True # download student responses and prompts
+STAGE1 = False # download student responses and prompts
 STAGE2 = True # create rater quiz
 
 if STAGE1 or (STAGE2 and not wavs_from_server):

@@ -2,6 +2,7 @@ __pycache__/
 my_cookies.py
 moodle_quiz
 prompt_files
+moodle_quiz2
 *.txt
 *.zip
 backup/*
