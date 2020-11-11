@@ -21,8 +21,8 @@ wavs_from_server = True # True if you want to access the audio responses from th
                         # (in this case, you need to upload them to the server manually before running the script);
                         # False if you want to access the audio responses diectly from the student quizes
                         # (in this case, no need to download the student recordings; links will be extracted from recordings_links_file)
-server_path = "http://digitalamoodle.aalto.fi/digi_rsrc/" # path to server where the uploaded audio responses are located
-                                                            # (needed only if wavs_from_server = True)
+server_path = "http://digitalamoodle.aalto.fi/digi_rsrc/moodle_annotator_course" # path to server
+                # where the uploaded audio responses are located (needed only if wavs_from_server = True)
 
 STAGE1 = False # download student responses and prompts
 STAGE2 = True # create rater quiz
