@@ -75,10 +75,15 @@ if STAGE2:
             wav_path = dict_recording_url[(user, ques_var)]
         task_prompt = os.path.abspath(os.sep.join(dirpath.split(os.sep)[:-2])+os.sep+'task_prompt.txt')
         question_prompt = os.path.abspath(os.sep.join(dirpath.split(os.sep)[:-1])+os.sep+'prompt.txt')
-        if os.path.isfile(os.path.abspath(dirpath+os.sep+'transcript.txt')):
+
+        # Add transcript if such exists. Note: several transcripts (transcript.txt / transcript(1).txt)
+        if os.path.isfile(os.path.abspath(dirpath+os.sep+'transcript.txt')) and '(1)' not in wavfile:
             transcript = os.path.abspath(dirpath+os.sep+'transcript.txt')
+        elif os.path.isfile(os.path.abspath(dirpath+os.sep+'transcript(1).txt')) and '(1)' in wavfile:
+            transcript = os.path.abspath(dirpath+os.sep+'transcript(1).txt')
         else:
             transcript = None
+
         generate_quiz_xml(txt, task, ques_var, user, wav_path, task_prompt, question_prompt, quiz, transcript)
 
     # Save the quiz in a moodle xml file
