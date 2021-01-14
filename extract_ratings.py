@@ -1,10 +1,8 @@
 import pandas as pd
 import re
+import glob, os
 
-def get_ratings(csv_file):
-    """
-    csv_file: csv file from quiz -> responses -> download .csv
-    """
+def get_rating_list(csv_file):
     rating_list = []
     df = pd.read_csv(csv_file)
     #df.columns # list column names
@@ -36,7 +34,6 @@ def get_ratings(csv_file):
                 for i, osa in enumerate(data):
                     data[i] = osa.split(':')
                     
-                    ## Remember to check this piece of code after you change the quiz template
                     # Odd elements are CEFR level, comments or redundant empty elements
                     if int(data[i][0].split(' ')[-1])%2 == 1:
                         # First element = CEFR level
@@ -50,14 +47,45 @@ def get_ratings(csv_file):
                             continue
                     # Even elements are grades. Some of them may be empty (= grade missing)    
                     else:
-                        # Empty answer => add '_'
+                        # Empty answer => add 9999
                         if data[i][1] == ' ':
-                            answers += '_'
+                            answers += [9999]
                         # Non-empty answer => extract grade
                         else:
-                            answers += re.findall(r"\((\d+)\)", data[i][1])[0]
+                            answers += [int(re.findall(r"\((\d+)\)", data[i][1])[0])]
                         
                 # Add the extracted data to the list
-                rating_list += [[rater, student_id, task] + answers]
+                rating_list += [[student_id, task, rater] + answers]
                 
     return rating_list
+
+def main():
+    rating_list = [] # list of lists of ratings
+    columns = ['Opiskelija',
+               'Tehtävä',
+               'Arvioija',
+               'Arvio taitotasosta',
+               'Tehtävän suorittaminen',
+               'Sujuvuus',
+               'Ääntäminen',
+               'Ilmaisun laajuus tehtävänantoon nähden',
+               'Sanaston ja kieliopin tarkkuus',
+               'Varmuus arviosta',
+               'Kommentteja'] # columns in output table. ATTENTION: the order
+                                # should be the same as in rating_list
+                                # from get_rating_list()
+    # The CSV files with ratings should be located in the same folder with this script
+    for file in glob.glob("*.csv"):
+        rating_list += get_rating_list(file)
+        
+    # Sort ratings by 1. student ID, 2. task ID, 3. rater ID
+    rating_list.sort(key=lambda x: (x[0], x[1], x[2]))
+    
+    # Convert to a dataframe
+    newtable = pd.DataFrame(rating_list, columns=columns)
+    
+    # Save table in .csv and .xlsx formats
+    newtable.to_csv('ratings_2021.csv', encoding='utf-8-sig', index=False)
+    newtable.to_excel('ratings_2021.xlsx', encoding='utf-8-sig', index=False)
+    
+main()
