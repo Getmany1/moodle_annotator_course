@@ -189,7 +189,7 @@ def generate_quiz_xml(txt, task, ques_var, user, wav_path, task_prompt, question
 
     return quiz
 
-def generate_quiz_xml_YKI(txt, task, user, wav_path, task_prompt, quiz):
+def generate_quiz_xml_YKI(txt, task, user, wav_path, task_prompt, quiz, path_to_control_set_txt):
     """Generate a Cloze-type Moodle question quiz"""
 
     #TODO:  Check if adding smth like transcript=etree.SubElement(transcript, "text") is necessary
@@ -209,13 +209,34 @@ def generate_quiz_xml_YKI(txt, task, user, wav_path, task_prompt, quiz):
     hidden.text = "0"
     idnumber = etree.SubElement(question, "idnumber")
 
+    # Create list of samples to mark with the control_set tag
+    control_set_sample_list = []
+    with open(path_to_control_set_txt, 'r', encoding='utf-8') as f:
+        text = f.read().split('\n')
+        for line in text:
+            if 'ylin' in line:
+                level='high'
+            elif 'keski' in line:
+                level='intermediate'
+            else:
+                line = line.replace('puhuja','speaker').replace('ääni_tehtävä','')
+                if level=='high' and line[-1]=='1':
+                    line=line.replace('_1','_1.2')
+                if level=='intermediate' and line[-1]=='1':
+                    line=line.replace('_1','_1.1')
+                control_set_sample_list += [line]
+
     # Add tags
-    # tags = etree.SubElement(question, "tags")
-    # tag_list = [user, task, ques_var] # list of tags to be added
-    # for tag in tag_list:
-    #     new_tag = etree.SubElement(tags, "tag")
-    #     tag_text = etree.SubElement(new_tag, "text")
-    #     tag_text.text = tag
+    tags = etree.SubElement(question, "tags")
+    tag_list = ["YKI_FI", user, task] # list of tags to be added
+    #print(user+'_'+task)
+    #print(control_set_sample_list)
+    if user+'_'+task in control_set_sample_list:
+        tag_list += ['control_set']
+    for tag in tag_list:
+        new_tag = etree.SubElement(tags, "tag")
+        tag_text = etree.SubElement(new_tag, "text")
+        tag_text.text = tag
 
     return quiz
 
