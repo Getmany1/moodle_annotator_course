@@ -149,6 +149,11 @@ def gen_rubric(txt, student, question, t_prompt, q_prompt, wavpath, transcript):
     s = Template(txt)
     tt = s.substitute(StudentID=student, QuestionID=question, TaskPrompt=t_prompt, QuestionPrompt=q_prompt, Transcript=transcript, Wav_path=wavpath)
     return tt
+
+def gen_rubric_YKI(txt, student, question, t_prompt, wavpath):
+    s = Template(txt)
+    tt = s.substitute(StudentID=student, QuestionID=question, TaskPrompt=t_prompt, Wav_path=wavpath)
+    return tt
     
 
 def generate_quiz_xml(txt, task, ques_var, user, wav_path, task_prompt, question_prompt, quiz, transcript):
@@ -181,6 +186,36 @@ def generate_quiz_xml(txt, task, ques_var, user, wav_path, task_prompt, question
         new_tag = etree.SubElement(tags, "tag")
         tag_text = etree.SubElement(new_tag, "text")
         tag_text.text = tag
+
+    return quiz
+
+def generate_quiz_xml_YKI(txt, task, user, wav_path, task_prompt, quiz):
+    """Generate a Cloze-type Moodle question quiz"""
+
+    #TODO:  Check if adding smth like transcript=etree.SubElement(transcript, "text") is necessary
+    
+    question = etree.SubElement(quiz, "question", type="cloze")
+    name = etree.SubElement(question, "name")
+    text = etree.SubElement(name, "text")
+    text.text = f"{task}_{user}"
+    questiontext = etree.SubElement(question, "questiontext", format="html")
+    qtext = etree.SubElement(questiontext, "text")
+    qtext.text = gen_rubric_YKI(txt, user, task, read_txt(task_prompt), wav_path)
+    generalfeedback = etree.SubElement(question, "generalfeedback", format="html")
+    gb_text = etree.SubElement(generalfeedback, "text")
+    penalty = etree.SubElement(question, "penalty")
+    penalty.text = "0.333"
+    hidden = etree.SubElement(question, "hidden")
+    hidden.text = "0"
+    idnumber = etree.SubElement(question, "idnumber")
+
+    # Add tags
+    # tags = etree.SubElement(question, "tags")
+    # tag_list = [user, task, ques_var] # list of tags to be added
+    # for tag in tag_list:
+    #     new_tag = etree.SubElement(tags, "tag")
+    #     tag_text = etree.SubElement(new_tag, "text")
+    #     tag_text.text = tag
 
     return quiz
 

@@ -13,5 +13,5 @@ outputs/**
 .vscode
 rubric_quiz.py
 *.html
-!template.html
+!*template*
 *.xml

@@ -7,23 +7,17 @@
         <td style="border: 1px solid black;"><b><u>Kysymys​:</u></b> $QuestionID <br><br></td>
     </tr>
     <tr>
-        <td style="border: 1px solid black;"><b><u>Tehtävänanto:</u></b> $TaskPrompt <br><br></td>
+        <td style="border: 1px solid black;"><b><u>Tehtävänanto: </u></b> $TaskPrompt <br><br></td>
     </tr>
     <tr>
-        <td style="border: 1px solid black;"><b><u>Koekysymys:</u></b> $QuestionPrompt <br><br></td>
-    </tr>
-    <!--<tr>
-        <td style="border: 1px solid black;"><b><u>Äänite kirjoitettuna tekstiksi​:</u></b> $Transcript <br><br></td>
-    </tr>-->
-    <tr>
-        <td style="border: 1px solid black;"><b><u>Arvioitava äänite:</u></b><a href="$Wav_path" style="background-color: rgb(255, 255, 255); font-size: 0.9375rem; font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;;">recording.ogg</a><br><br></td>
+        <td style="border: 1px solid black;"><b><u>Arvioitava äänite:</u></b><a href="$Wav_path" style="background-color: rgb(255, 255, 255); font-size: 0.9375rem; font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;Noto Color Emoji&quot;;">recording.wav</a><br><br></td>
     </tr>
     <tr>
         <td style="border: 1px solid black;"><u><b><i><font size="+2">Onko äänitteessä mitään, mikä tekee arvioinnin mahdottomaksi?</font></i></b></u> {1:MULTIRESPONSE:%100%Ei ole, kaikki OK#~%0%Ei tarpeeksi puhetta (vain muutama sana lausuttu)#~%0%Liian huono laatu (taustamelua, hiljainen ääni)#~%0%Muu (tarkenna Yleiset kommentit -kentässä)} 
             <br><br></td>
     </tr>
     <tr>
-        <td style="border: 1px solid black;"><b>Arvio taitotasosta​</b> {1:MULTICHOICE_H:%100%alle A1#~%100%A1#~%100%A2#~%100%B1#~%100%B2#~%100%C1#~%100%C2#~%100%Ei voi arvioida#}
+        <td style="border: 1px solid black;"><b>Arvio taitotasosta ​</b> {1:MULTICHOICE_H:%100%alle A1#~%100%A1#~%100%A2#~%100%B1#~%100%B2#~%100%C1#~%100%C2#~%100%Ei voi arvioida#}
             <br><br></td>
     </tr>
     <tr>
