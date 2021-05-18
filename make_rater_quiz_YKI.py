@@ -2,10 +2,10 @@ import requests
 from datetime import datetime
 import os
 import glob
-import urllib3
+#import urllib3
 from utils import *
-from my_cookies import cookies, headers # personal cookies from moodle (convert curl to python with https://curl.trillworks.com/)
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+#from my_cookies import cookies, headers # personal cookies from moodle (convert curl to python with https://curl.trillworks.com/)
+#urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 ## Parameters
 audio_format = 'wav' # audio format of audio recordings, default: 'ogg'
