@@ -15,3 +15,5 @@ rubric_quiz.py
 *.html
 !*template*
 *.xml
+digitala_fi_05_2021
+*.csv

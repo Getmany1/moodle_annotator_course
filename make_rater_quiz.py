@@ -8,8 +8,8 @@ from my_cookies import cookies, headers # personal cookies from moodle (convert 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 ## Parameters
-recordings_links_file = 'quiz.txt' # txt file which contains links for student audio responses
-audio_format = 'wav' # audio format of audio recordings, default: 'ogg'
+recordings_links_file = 'quiz_26.05.2021_ALL.txt' # txt file which contains links for student audio responses
+audio_format = 'ogg' # audio format of audio recordings, default: 'ogg'
 parent_dir = 'moodle_quiz2' # name of folder which will contain the collected data
 output_dir = 'outputs' # name of folder where to put the generated xml quizes
 html_temp_fname = 'template.html' # html template file for rater quiz
@@ -24,8 +24,8 @@ wavs_from_server = True # True if you want to access the audio responses from th
 server_path = "http://digitalamoodle.aalto.fi/digi_rsrc/moodle_annotator_course/" # path to server
                 # where the uploaded audio responses are located (needed only if wavs_from_server = True)
 
-STAGE1 = False # download student responses and prompts
-STAGE2 = True # create rater quiz
+STAGE1 = True # download student responses and prompts
+STAGE2 = False # create rater quiz
 
 if STAGE1 or (STAGE2 and not wavs_from_server):
     # Get a dictionary to map from Moodle user IDs to user names
