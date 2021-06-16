@@ -12,7 +12,7 @@ recordings_links_file = 'quiz_26.05.2021_ALL.txt' # txt file which contains link
 audio_format = 'ogg' # audio format of audio recordings, default: 'ogg'
 parent_dir = 'moodle_quiz2' # name of folder which will contain the collected data
 output_dir = 'outputs' # name of folder where to put the generated xml quizes
-html_temp_fname = 'template.html' # html template file for rater quiz
+html_temp_fname = 'template_SV.html' # html template file for rater quiz
 prompt_source = 'html' # 'xml' to extract prompts from a xml backup file questions.xml
                     # 'html' to extract prompts from a html copy of the quiz
 html_filename = 'student_quiz.html' # name of the html file containing the copy of the quiz

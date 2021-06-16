@@ -6,6 +6,8 @@ from string import Template
 from lxml import etree
 from bs4 import BeautifulSoup as BS
 from bs4 import Comment
+import pandas as pd
+import glob
 
 def prompt_from_html(html_filename, id):
     """
@@ -240,6 +242,59 @@ def generate_quiz_xml_YKI(txt, task, user, wav_path, task_prompt, quiz, path_to_
 
     return quiz
 
+def generate_quiz_xml_LUKIO(txt, task, subtask, user, wav_path, task_prompt, subtask_prompt, quiz, path_to_control_set_txt):
+    """Generate a Cloze-type Moodle question quiz"""
+
+    #TODO:  Check if adding smth like transcript=etree.SubElement(transcript, "text") is necessary
+    
+    if subtask:
+        task+=subtask
+
+    question = etree.SubElement(quiz, "question", type="cloze")
+    name = etree.SubElement(question, "name")
+    text = etree.SubElement(name, "text")
+    text.text = f"{task}_{user}"
+    questiontext = etree.SubElement(question, "questiontext", format="html")
+    qtext = etree.SubElement(questiontext, "text")
+    # Add subtask prompt if exists
+    if subtask_prompt:
+        qtext.text = gen_rubric_YKI(txt, user, task, read_txt(task_prompt)+'<br><br>'+read_txt(subtask_prompt), wav_path)
+    else:
+        qtext.text = gen_rubric_YKI(txt, user, task, read_txt(task_prompt), wav_path)
+    generalfeedback = etree.SubElement(question, "generalfeedback", format="html")
+    gb_text = etree.SubElement(generalfeedback, "text")
+    penalty = etree.SubElement(question, "penalty")
+    penalty.text = "0.333"
+    hidden = etree.SubElement(question, "hidden")
+    hidden.text = "0"
+    idnumber = etree.SubElement(question, "idnumber")
+
+    # Create list of samples to mark with the control_set tag
+    control_set_sample_list = []
+    with open(path_to_control_set_txt, 'r', encoding='utf-8') as f:
+        text = f.read().split('\n')
+        for line in text:
+            line = line.split('/')
+            # 1. Subtask in path
+            if len(line) == 12:
+                control_set_sample_list += [line[-2]+'_'+''.join(line[-4:-2])]
+            # 2. No subtask in path
+            elif len(line) == 11:
+                control_set_sample_list += [line[-2]+'_'+''.join(line[-3])]
+
+    # Add tags
+    tags = etree.SubElement(question, "tags")
+    tag_list = ["LUKIO_FI", user, task] # list of tags to be added
+    #print(user+'_'+task)
+    #print(control_set_sample_list)
+    if user+'_'+task in control_set_sample_list:
+        tag_list += ['control_set']
+    for tag in tag_list:
+        new_tag = etree.SubElement(tags, "tag")
+        tag_text = etree.SubElement(new_tag, "text")
+        tag_text.text = tag
+    return quiz
+
 def getdict_recording_url(recordings_links_file, dict_userid_username, dict_q):
     """
     Make a dictionary to map from Moodle username and question number to the link to the corresponding audio recording
@@ -254,3 +309,121 @@ def getdict_recording_url(recordings_links_file, dict_userid_username, dict_q):
                 question_num = dict_q[qnum]
                 dict_recording_url[(username, question_num)] = url
     return dict_recording_url
+
+def getdict_old_to_new_task_num(moodle_course_id):
+    """
+    Make a dictionary to map from Moodle question number
+    to new task number
+    """ 
+    if moodle_course_id == '6':
+        """
+        Suullisen kielitaidon koe (suomi, 9.2.2021)
+        B1.1 (9.2.2021)
+        """
+        dict_old_to_new_task_num={
+            "1": "1_a",
+            "2": "1_b",
+            "3": "1_c",
+            "4": "1_d",
+            "5": "1_e",
+            "6": "1_f",
+            "7": "2",
+            "8": "3_a",
+            "9": "3_b",
+            "10": "3_c",
+            "11": "3_d",
+            "12": "4_a",
+            "13": "4_b",
+            "14": "4_c",
+            "15": "4_d",
+            "16": "5",
+            "17": "6_a"
+        }
+    elif moodle_course_id == '13':
+        """
+        Puhumisen koe (suomi, 03/2021)
+        B1.2 (03/2021)
+        """
+        dict_old_to_new_task_num={
+            "1":"0",
+            "2": "1_a",
+            "3": "1_b",
+            "4": "1_c",
+            "5": "1_d",
+            "6": "1_e",
+            "7": "1_f",
+            "8": "2",
+            "9": "3_a",
+            "10": "3_b",
+            "11": "3_c",
+            "12": "3_d",
+            "13": "4_a",
+            "14": "4_b",
+            "15": "4_c",
+            "16": "4_d",
+            "17": "5"
+        }
+    elif moodle_course_id == '15' or \
+        moodle_course_id == '16':
+        """
+        Puhumisen koe B1 (suomi, 04/2021) & Puhumisen koe B1 (suomi, 17.05.2021)
+        B1.3 (04/2021) & B1.4 (17.05.2021)
+        """
+        dict_old_to_new_task_num={
+            "1":"0",
+            "2": "1_a",
+            "3": "1_b",
+            "4": "1_c",
+            "5": "1_d",
+            "6": "1_e",
+            "7": "1_f",
+            "8": "2",
+            "9": "3_a",
+            "10": "3_b",
+            "11": "3_e",
+            "12": "3_f",
+            "13": "4_e",
+            "14": "4_b",
+            "15": "4_c",
+            "16": "4_d",
+            "17": "5"
+        }
+    elif moodle_course_id == '14' or \
+        moodle_course_id == '17' or \
+            moodle_course_id == '19' or \
+                moodle_course_id == '20':
+        """
+        Puhumisen koe (suomi, 04/2021) & Puhumisen koe B2 (suomi, 17.05.2021) &
+        Puhumisen koe B2 (suomi, 21.05.2021) & Puhumisen koe B2 (suomi, 26.05.2021)
+        B2.1 (04/2021) & B2.2 (17.05.2021) & B2.3 (21.05.2021) & B2.4 (26.05.2021)
+        """
+        dict_old_to_new_task_num={
+            "1":"0",
+            "2": "1_a",
+            "3": "1_b",
+            "4": "1_c",
+            "5": "1_d",
+            "6": "1_e",
+            "7": "1_f",
+            "8": "2",
+            "9": "7",
+            "10": "8_a",
+            "11": "8_b",
+            "12": "8_c",
+            "13": "8_d",
+            "14": "6_b"
+        }
+    return dict_old_to_new_task_num
+
+def rename_old_to_new_task_nums(digitala_student_accounts):
+    """
+    Rename moodle question numbers to new task numbers
+    digitala_student_accounts: Digitala_moodle_accounts.xlsx
+    """
+    df=pd.read_excel(digitala_student_accounts)
+    for f in glob.glob('*.wav'):
+        moodle_course_id = df[df.username == f.split('_')[0]].kurssi.item().split('=')[-1]
+        moodle_question_num = f.split('.')[0].split('_')[-1]
+        dict_old_to_new_task_num = getdict_old_to_new_task_num(moodle_course_id)
+        new_task_num = dict_old_to_new_task_num[moodle_question_num]
+        os.rename(f, f.split('_')[0]+'_teht_'+new_task_num+'.wav')
