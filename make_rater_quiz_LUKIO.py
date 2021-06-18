@@ -2,6 +2,7 @@
 from datetime import datetime
 import os
 import glob
+import pickle as pkl
 #import urllib3
 from utils import *
 #from my_cookies import cookies, headers # personal cookies from moodle (convert curl to python with https://curl.trillworks.com/)
@@ -17,6 +18,8 @@ html_temp_fname = 'template_FI.html' # html template file for rater quiz
 server_path = "http://digitalamoodle.aalto.fi/digi_rsrc/moodle_annotator_course/" # path to server
                 # where the uploaded audio responses are located
 path_to_control_set_txt = "Digitala-fi-lukio-control-set.txt" # path to a txt file with th control set
+with open('lukio_raters.pickle','rb') as f:
+    rater_to_sample_dict = pkl.load(f)  # dictionary to map each rater to their samples to be rated
 
 ## Create quiz
 
@@ -53,7 +56,7 @@ for f in glob.glob(parent_dir+'/**/*.'+audio_format, recursive=True):
         else:
             transcript = None
 
-        generate_quiz_xml_LUKIO(txt, task, subtask, user, wav_path, task_prompt, subtask_prompt, quiz, path_to_control_set_txt)
+        generate_quiz_xml_LUKIO(txt, task, subtask, user, wav_path, task_prompt, subtask_prompt, quiz, path_to_control_set_txt, rater_to_sample_dict)
 
 # Save the quiz in a moodle xml file
 rater_quiz_xml_fname = 'raterquiz_LUKIO_' + datetime.now().strftime("%d.%m.%Y_%H-%M-%S") + '.xml'

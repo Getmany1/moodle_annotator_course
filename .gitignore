@@ -6,6 +6,7 @@ collected_freeform_2020_remaining
 prompt_files
 *.txt
 *.zip
+*.pickle
 backup/**
 !backup/.gitkeep
 outputs/**

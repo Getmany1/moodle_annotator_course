@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup as BS
 from bs4 import Comment
 import pandas as pd
 import glob
+import pickle as pkl
 
 def prompt_from_html(html_filename, id):
     """
@@ -242,7 +243,7 @@ def generate_quiz_xml_YKI(txt, task, user, wav_path, task_prompt, quiz, path_to_
 
     return quiz
 
-def generate_quiz_xml_LUKIO(txt, task, subtask, user, wav_path, task_prompt, subtask_prompt, quiz, path_to_control_set_txt):
+def generate_quiz_xml_LUKIO(txt, task, subtask, user, wav_path, task_prompt, subtask_prompt, quiz, path_to_control_set_txt, rater_to_sample_dict=None):
     """Generate a Cloze-type Moodle question quiz"""
 
     #TODO:  Check if adding smth like transcript=etree.SubElement(transcript, "text") is necessary
@@ -289,6 +290,10 @@ def generate_quiz_xml_LUKIO(txt, task, subtask, user, wav_path, task_prompt, sub
     #print(control_set_sample_list)
     if user+'_'+task in control_set_sample_list:
         tag_list += ['control_set']
+    if rater_to_sample_dict:
+        for rater in rater_to_sample_dict.keys():
+            if user+'_'+task in rater_to_sample_dict[rater]:
+                tag_list += [rater]
     for tag in tag_list:
         new_tag = etree.SubElement(tags, "tag")
         tag_text = etree.SubElement(new_tag, "text")
